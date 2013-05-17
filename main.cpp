@@ -90,7 +90,7 @@ void initVBO()
 // draw it contra-clockwise
 // front: 1 5 7 3
 // back: 0 2 6 4
-// left£º0 1 3 2
+// leftï¼š0 1 3 2
 // right:7 5 4 6    
 // up: 2 3 7 6
 // down: 1 0 4 5
@@ -452,7 +452,7 @@ void initShader()
     g_rcFragHandle = initShaderObj("shader/raycasting.frag", GL_FRAGMENT_SHADER);
 // create the shader program , use it in an appropriate time
     g_programHandle = createShaderPgm();
-// »ñµÃÓÉ×ÅÉ«Æ÷±àÒëÆ÷·ÖÅäµÄË÷Òı(¿ÉÑ¡)
+// è·å¾—ç”±ç€è‰²å™¨ç¼–è¯‘å™¨åˆ†é…çš„ç´¢å¼•(å¯é€‰)
 }
 
 // link the shader objects using the shader program
