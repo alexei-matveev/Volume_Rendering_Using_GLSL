@@ -606,6 +606,7 @@ void keyboard(unsigned char key, int x, int y)
 {
     switch (key)
     {
+    case 'q':
     case '\x1B':
 	exit(EXIT_SUCCESS);
 	break;
