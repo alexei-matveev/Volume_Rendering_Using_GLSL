@@ -15,6 +15,6 @@ void main()
 {
     EntryPoint = VerClr;
     gl_Position = MVP * vec4(VerPos,1.0);
-    // ExitPointCoord ÊäÈëµ½fragment shader µÄ¹ı³ÌÖĞ¾­¹ırasterization£¬ interpolation, assembly primitive
+    // ExitPointCoord è¾“å…¥åˆ°fragment shader çš„è¿‡ç¨‹ä¸­ç»è¿‡rasterizationï¼Œ interpolation, assembly primitive
     ExitPointCoord = gl_Position;  
 }

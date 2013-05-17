@@ -1,5 +1,5 @@
 #version 400
-// ¶Å¾øÉùÃ÷Î´Ê¹ÓÃµÄ±äÁ¿£¬±ÜÃâbugµÄ²úÉú¡£
+// æœç»å£°æ˜æœªä½¿ç”¨çš„å˜é‡ï¼Œé¿å…bugçš„äº§ç”Ÿã€‚
 
 
 in vec3 EntryPoint;
@@ -14,8 +14,8 @@ layout (location = 0) out vec4 FragColor;
 
 void main()
 {
-    // ExitPointCoord µÄ×ø±êÊÇÉè±¸¹æ·¶»¯×ø±ê
-    // ³öÏÖÁËºÍÎÆÀí×ø±êÓĞ¹ØµÄÎÊÌâ¡£
+    // ExitPointCoord çš„åæ ‡æ˜¯è®¾å¤‡è§„èŒƒåŒ–åæ ‡
+    // å‡ºç°äº†å’Œçº¹ç†åæ ‡æœ‰å…³çš„é—®é¢˜ã€‚
     vec3 exitPoint = texture(ExitPoints, gl_FragCoord.st/ScreenSize).xyz;
     // that will actually give you clip-space coordinates rather than
     // normalised device coordinates, since you're not performing the perspective
@@ -33,7 +33,7 @@ void main()
     vec3 voxelCoord = EntryPoint;
     vec4 colorAcum = vec4(0.0); // The dest color
     float alphaAcum = 0.0;                // The  dest alpha for blending
-    /* ¶¨ÒåÑÕÉ«²éÕÒµÄ×ø±ê */
+    /* å®šä¹‰é¢œè‰²æŸ¥æ‰¾çš„åæ ‡ */
     float intensity;
     float lengthAcum = 0.0;
     vec4 colorSample; // The src color 
@@ -43,10 +43,10 @@ void main()
  
     for(int i = 0; i < 1600; i++)
     {
-    	// »ñµÃÌåÊı¾İÖĞµÄ±êÁ¿Öµscaler value
+    	// è·å¾—ä½“æ•°æ®ä¸­çš„æ ‡é‡å€¼scaler value
     	intensity =  texture(VolumeTex, voxelCoord).x;
-    	// ²éÕÒ´«Êäº¯ÊıÖĞÓ³ÉäºóµÄÖµ
-    	// ÒÀÀµĞÔÎÆÀí¶ÁÈ¡  
+    	// æŸ¥æ‰¾ä¼ è¾“å‡½æ•°ä¸­æ˜ å°„åçš„å€¼
+    	// ä¾èµ–æ€§çº¹ç†è¯»å–  
     	colorSample = texture(TransferFunc, intensity);
     	// modulate the value of colorSample.a
     	// front-to-back integration
