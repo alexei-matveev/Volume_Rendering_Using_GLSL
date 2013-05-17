@@ -6,10 +6,10 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <GL/glut.h>
-#include <GL/glm/glm.hpp>
-#include <GL/glm/gtc/matrix_transform.hpp>
-#include <GL/glm/gtx/transform2.hpp>
-#include <GL/glm/gtc/type_ptr.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform2.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 #define GL_ERROR() checkForOpenGLError(__FILE__, __LINE__)
