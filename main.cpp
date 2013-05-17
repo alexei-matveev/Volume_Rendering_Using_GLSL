@@ -90,7 +90,7 @@ void initVBO()
 // draw it contra-clockwise
 // front: 1 5 7 3
 // back: 0 2 6 4
-// left：0 1 3 2
+// left: 0 1 3 2
 // right:7 5 4 6    
 // up: 2 3 7 6
 // down: 1 0 4 5
