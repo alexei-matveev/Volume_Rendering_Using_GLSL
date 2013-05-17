@@ -617,7 +617,7 @@ int main(int argc, char** argv)
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(400, 400);
+    glutInitWindowSize (g_winWidth, g_winHeight);
     glutCreateWindow("GLUT Test");
     GLenum err = glewInit();
     if (GLEW_OK != err)
