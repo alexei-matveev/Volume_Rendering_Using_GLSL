@@ -1,8 +1,15 @@
 // for raycasting
-#version 400
 
-layout(location = 0) in vec3 VerPos;
-layout(location = 1) in vec3 VerClr;
+#if __VERSION__ >= 400
+#version 400
+#define LAYOUT_LOCATION(n) layout(location = n)
+#else
+#version 130
+#define LAYOUT_LOCATION(n) /* layout(location = n) */
+#endif
+
+LAYOUT_LOCATION(0) in vec3 VerPos;
+LAYOUT_LOCATION(1) in vec3 VerClr;
 
 out vec3 Color;
 

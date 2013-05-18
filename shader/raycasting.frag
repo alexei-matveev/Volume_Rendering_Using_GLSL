@@ -1,6 +1,12 @@
-#version 400
 // 杜绝声明未使用的变量，避免bug的产生。
 
+#if __VERSION__ >= 400
+#version 400
+#define LAYOUT_LOCATION(n) layout(location = n)
+#else
+#version 130
+#define LAYOUT_LOCATION(n) /* layout(location = n) */
+#endif
 
 in vec3 EntryPoint;
 in vec4 ExitPointCoord;
@@ -10,7 +16,7 @@ uniform sampler3D VolumeTex;
 uniform sampler1D TransferFunc;  
 uniform float     StepSize;
 uniform vec2      ScreenSize;
-layout (location = 0) out vec4 FragColor;
+LAYOUT_LOCATION(0) out vec4 FragColor;
 
 void main()
 {

@@ -1,9 +1,16 @@
+
+#if __VERSION__ >= 400
 #version 400
+#define LAYOUT_LOCATION(n) layout(location = n)
+#else
+#version 130
+#define LAYOUT_LOCATION(n) /* layout(location = n) */
+#endif
 
-
-layout (location = 0) in vec3 VerPos;
-// have to use this variable!!!, or it will be very hard to debug for AMD video card
-layout (location = 1) in vec3 VerClr;  
+LAYOUT_LOCATION(0) in vec3 VerPos;
+/* Have to use this variable! Or it will be very hard to debug for AMD
+   video card */
+LAYOUT_LOCATION(1) in vec3 VerClr;
 
 
 out vec3 EntryPoint;
