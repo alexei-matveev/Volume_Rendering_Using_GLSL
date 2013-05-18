@@ -13,7 +13,7 @@ in vec4 ExitPointCoord;
 
 uniform sampler2D ExitPoints;
 uniform sampler3D VolumeTex;
-uniform sampler1D TransferFunc;  
+uniform sampler1D TransferFunc;
 uniform float     StepSize;
 uniform vec2      ScreenSize;
 LAYOUT_LOCATION(0) out vec4 FragColor;
@@ -42,17 +42,17 @@ void main()
     /* 定义颜色查找的坐标 */
     float intensity;
     float lengthAcum = 0.0;
-    vec4 colorSample; // The src color 
+    vec4 colorSample; // The src color
     float alphaSample; // The src alpha
     // backgroundColor
     vec4 bgColor = vec4(1.0, 1.0, 1.0, 0.0);
- 
+
     for(int i = 0; i < 1600; i++)
     {
     	// 获得体数据中的标量值scaler value
     	intensity =  texture(VolumeTex, voxelCoord).x;
     	// 查找传输函数中映射后的值
-    	// 依赖性纹理读取  
+    	// 依赖性纹理读取
     	colorSample = texture(TransferFunc, intensity);
     	// modulate the value of colorSample.a
     	// front-to-back integration
@@ -65,10 +65,10 @@ void main()
     	voxelCoord += deltaDir;
     	lengthAcum += deltaDirLen;
     	if (lengthAcum >= len )
-    	{	
-    	    colorAcum.rgb = colorAcum.rgb*colorAcum.a + (1 - colorAcum.a)*bgColor.rgb;		
-    	    break;  // terminate if opacity > 1 or the ray is outside the volume	
-    	}	
+    	{
+    	    colorAcum.rgb = colorAcum.rgb*colorAcum.a + (1 - colorAcum.a)*bgColor.rgb;
+    	    break;  // terminate if opacity > 1 or the ray is outside the volume
+    	}
     	else if (colorAcum.a > 1.0)
     	{
     	    colorAcum.a = 1.0;
@@ -79,5 +79,5 @@ void main()
     // for test
     // FragColor = vec4(EntryPoint, 1.0);
     // FragColor = vec4(exitPoint, 1.0);
-   
+
 }
