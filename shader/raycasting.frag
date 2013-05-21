@@ -1,5 +1,7 @@
-// 杜绝声明未使用的变量，避免bug的产生。
-
+/*
+  Eliminating (avoid?) unused variables to prevent bugs. [original: 杜
+  绝声明未使用的变量，避免bug的产生。]
+*/
 #if __VERSION__ >= 400
 #version 400
 #define LAYOUT_LOCATION(n) layout(location = n)
@@ -20,8 +22,12 @@ LAYOUT_LOCATION(0) out vec4 FragColor;
 
 void main()
 {
-    // ExitPointCoord 的坐标是设备规范化坐标
-    // 出现了和纹理坐标有关的问题。
+    /*
+      The   coordinates  of   ExitPointCoord  are   normalized  device
+      coordinates.   Here   are  some  problems   related  to  texture
+      coordinates. [original: ExitPointCoord 的坐标是设备规范化坐标出现
+      了和纹理坐标有关的问题。]
+    */
     vec3 exitPoint = texture(ExitPoints, gl_FragCoord.st/ScreenSize).xyz;
     // that will actually give you clip-space coordinates rather than
     // normalised device coordinates, since you're not performing the perspective
@@ -39,7 +45,10 @@ void main()
     vec3 voxelCoord = EntryPoint;
     vec4 colorAcum = vec4(0.0); // The dest color
     float alphaAcum = 0.0;                // The  dest alpha for blending
-    /* 定义颜色查找的坐标 */
+    /*
+      Define coordinates for color searching. [original: 定义颜色查找的
+      坐标]
+    */
     float intensity;
     float lengthAcum = 0.0;
     vec4 colorSample; // The src color
@@ -49,10 +58,16 @@ void main()
 
     for(int i = 0; i < 1600; i++)
     {
-    	// 获得体数据中的标量值scaler value
+        /*
+          Obtain scalar intensity from volume texture data. [original:
+          获得体数据中的标量值 scaler value]
+        */
     	intensity =  texture(VolumeTex, voxelCoord).x;
-    	// 查找传输函数中映射后的值
-    	// 依赖性纹理读取
+        /*
+          Look up the values of the transfer function depending on the
+          extracted volume texture intensity. [original: 查找传输函数中
+          映射后的值 依赖性纹理读取]
+        */
     	colorSample = texture(TransferFunc, intensity);
     	// modulate the value of colorSample.a
     	// front-to-back integration

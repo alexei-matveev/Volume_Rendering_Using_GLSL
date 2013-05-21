@@ -452,7 +452,8 @@ void initShader()
     g_rcFragHandle = initShaderObj("shader/raycasting.frag", GL_FRAGMENT_SHADER);
 // create the shader program , use it in an appropriate time
     g_programHandle = createShaderPgm();
-// 获得由着色器编译器分配的索引(可选)
+    // Obtained  indices distributed  by  shader compiler  (optional).
+    // [original: 获得由着色器编译器分配的索引 (可选)]
 }
 
 // link the shader objects using the shader program
