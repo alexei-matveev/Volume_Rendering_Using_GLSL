@@ -33,8 +33,8 @@ void main()
     // vec2 exitFragCoord = (ExitPointCoord.xy / ExitPointCoord.w + 1.0)/2.0;
     // vec3 exitPoint  = texture(ExitPoints, exitFragCoord).xyz;
     if (EntryPoint == exitPoint)
-    	//background need no raycasting
-    	discard;
+        //background need no raycasting
+        discard;
     vec3 dir = exitPoint - EntryPoint;
     // The  length  from front  to  back  is  calculated and  used  to
     // terminate the ray:
@@ -57,35 +57,35 @@ void main()
     {
         // Obtain    scalar     intensity    from    volume    texture
         // data. [original: 获得体数据中的标量值 scaler value]
-    	intensity =  texture(VolumeTex, voxelCoord).x;
+        intensity =  texture(VolumeTex, voxelCoord).x;
 
         // Look up  the values of  the transfer function  depending on
         // the extracted volume texture intensity. [original: 查找传输
         // 函数中映射后的值 依赖性纹理读取]
-    	colorSample = texture(TransferFunc, intensity);
-    	// Modulate   the  value   of   colorSample.a.   Front-to-back
-    	// integration
-    	if (colorSample.a > 0.0) {
-    	    // Accomodate for  variable sampling rates  (base interval
-    	    // defined by mod_compositing.frag)
-    	    colorSample.a = 1.0 - pow(1.0 - colorSample.a, StepSize*200.0f);
-    	    colorAcum.rgb += (1.0 - colorAcum.a) * colorSample.rgb * colorSample.a;
-    	    colorAcum.a += (1.0 - colorAcum.a) * colorSample.a;
-    	}
-    	voxelCoord += deltaDir;
-    	lengthAcum += deltaDirLen;
-    	if (lengthAcum >= len )
-    	{
-    	    colorAcum.rgb = colorAcum.rgb*colorAcum.a + (1 - colorAcum.a)*bgColor.rgb;
+        colorSample = texture(TransferFunc, intensity);
+        // Modulate   the  value   of   colorSample.a.   Front-to-back
+        // integration
+        if (colorSample.a > 0.0) {
+            // Accomodate for  variable sampling rates  (base interval
+            // defined by mod_compositing.frag)
+            colorSample.a = 1.0 - pow(1.0 - colorSample.a, StepSize*200.0f);
+            colorAcum.rgb += (1.0 - colorAcum.a) * colorSample.rgb * colorSample.a;
+            colorAcum.a += (1.0 - colorAcum.a) * colorSample.a;
+        }
+        voxelCoord += deltaDir;
+        lengthAcum += deltaDirLen;
+        if (lengthAcum >= len )
+        {
+            colorAcum.rgb = colorAcum.rgb*colorAcum.a + (1 - colorAcum.a)*bgColor.rgb;
             // Terminate  if opacity  > 1  or the  ray is  outside the
             // volume:
-    	    break;
-    	}
-    	else if (colorAcum.a > 1.0)
-    	{
-    	    colorAcum.a = 1.0;
-    	    break;
-    	}
+            break;
+        }
+        else if (colorAcum.a > 1.0)
+        {
+            colorAcum.a = 1.0;
+            break;
+        }
     }
     FragColor = colorAcum;
     // for test
