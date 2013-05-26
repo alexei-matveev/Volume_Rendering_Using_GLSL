@@ -22,6 +22,9 @@ uniform float     StepSize;
 uniform vec2      ScreenSize;
 LAYOUT_LOCATION(0) out vec4 FragColor;
 
+// Background color:
+const vec4 bgColor = vec4 (1.0, 1.0, 1.0, 0.0);
+
 void main()
 {
     // The  coordinates   of  ExitPointCoord  are   normalized  device
@@ -51,8 +54,6 @@ void main()
     // Define coordinates for color searching. [original: 定义颜色查找
     // 的坐标]
     float lengthAcum = 0.0;
-    // Background color
-    vec4 bgColor = vec4(1.0, 1.0, 1.0, 0.0);
 
     for(int i = 0; i < 1600; i++)
     {
