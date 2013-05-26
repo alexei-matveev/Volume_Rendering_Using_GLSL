@@ -315,47 +315,49 @@ GLuint initFace2DTex(GLuint bfTexWidth, GLuint bfTexHeight)
 }
 
 
-// init 3D texture to store the volume data used fo ray casting
+// Init 3D texture to store the volume data used for ray casting.
 static
-GLuint initVol3DTex(const char* filename, GLuint w, GLuint h, GLuint d)
+GLuint initVol3DTex (const char* filename, GLuint w, GLuint h, GLuint d)
 {
+    const size_t size = w * h * d;
+    GLubyte *data = new GLubyte[size]; // 8bit
 
-    FILE *fp;
-    size_t size = w * h * d;
-    GLubyte *data = new GLubyte[size];                    // 8bit
-    if (!(fp = fopen(filename, "rb")))
     {
-        cout << "Error: opening .raw file failed" << endl;
-        exit(EXIT_FAILURE);
+        FILE *fp = fopen (filename, "rb");
+
+        if (!fp)
+        {
+            cerr << "Error: opening file failed" << endl;
+            exit (EXIT_FAILURE);
+        }
+
+        if (fread (data, sizeof (char), size, fp) != size)
+        {
+            cerr << "Error: reading file failed" << endl;
+            exit (EXIT_FAILURE);
+        }
+
+        fclose (fp);
     }
-    else
-        cout << "OK: open .raw file successed" << endl;
 
-    if ( fread(data, sizeof(char), size, fp)!= size)
-    {
-        cout << "Error: read .raw file failed" << endl;
-        exit(1);
-    }
-    else
-        cout << "OK: read .raw file successed" << endl;
+    GLuint volTexObj;           // result
+    glGenTextures (1, &volTexObj);
 
-    fclose(fp);
+    // Bind 3D texture target:
+    glBindTexture (GL_TEXTURE_3D, volTexObj);
+    glTexParameteri (GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri (GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri (GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
 
-    glGenTextures(1, &g_volTexObj);
-    // bind 3D texture target
-    glBindTexture(GL_TEXTURE_3D, g_volTexObj);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-    // pixel transfer happens here from client to OpenGL server
-    glPixelStorei(GL_UNPACK_ALIGNMENT,1);
-    glTexImage3D(GL_TEXTURE_3D, 0, GL_INTENSITY, w, h, d, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE,data);
+    // Pixel transfer happens here from client to OpenGL server:
+    glPixelStorei (GL_UNPACK_ALIGNMENT,1);
+    glTexImage3D (GL_TEXTURE_3D, 0, GL_INTENSITY, w, h, d, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE,data);
 
-    delete []data;
-    cout << "volume texture created" << endl;
-    return g_volTexObj;
+    delete[] data;
+
+    return volTexObj;
 }
 
 
@@ -646,7 +648,7 @@ void init()
     initShader();
     g_tffTexObj = initTFF1DTex("tff.dat");
     g_bfTexObj = initFace2DTex(g_texWidth, g_texHeight);
-    g_volTexObj = initVol3DTex("head256.raw", 256, 256, 225);
+    g_volTexObj = initVol3DTex ("head256.raw", 256, 256, 225);
     GL_ERROR();
     initFrameBuffer(g_bfTexObj, g_texWidth, g_texHeight);
     GL_ERROR();
