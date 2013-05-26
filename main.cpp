@@ -13,9 +13,14 @@
 
 
 #define GL_ERROR() checkForOpenGLError(__FILE__, __LINE__)
-using namespace std;
+
+using std::cout;
+using std::cerr;
+using std::endl;
+
 using glm::mat4;
 using glm::vec3;
+
 static GLuint g_vao;
 static GLuint g_programHandle;
 static GLuint g_winWidth = 400;
