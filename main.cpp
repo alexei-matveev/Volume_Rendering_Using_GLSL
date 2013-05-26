@@ -170,45 +170,55 @@ GLboolean compileCheck (GLuint shader)
 }
 
 
+// Slurp a file into a char[]  and append 0 to that. You should free()
+// the result when no more needed.
+static char* slurp0 (const char *filename)
+{
+    FILE *fp = fopen (filename, "rb");
+    assert (fp != NULL);
+
+    fseek (fp, 0, SEEK_END);
+
+    const size_t len = ftell (fp);
+
+    char *buf = (char*) malloc (len + 1); // to append 0
+
+    rewind (fp);
+    const size_t count = fread (buf, 1, len, fp);
+    fclose (fp);
+    assert (count == len);
+
+    // Make sure the last line is terminated too:
+    buf[len] = 0;
+
+    return buf;
+}
+
+
 // init shader object
 static
 GLuint initShaderObj(const GLchar* srcfile, GLenum shaderType)
 {
-    ifstream inFile(srcfile, ifstream::in);
-    // use assert?
-    if (!inFile)
-    {
-        cerr << "Error openning file: " << srcfile << endl;
-        exit(EXIT_FAILURE);
-    }
-
-    const int MAX_CNT = 10000;
-    GLchar *shaderCode = (GLchar *) calloc(MAX_CNT, sizeof(GLchar));
-    inFile.read(shaderCode, MAX_CNT);
-    if (inFile.eof())
-    {
-        size_t bytecnt = inFile.gcount();
-        *(shaderCode + bytecnt) = '\0';
-    }
-    else if(inFile.fail())
-        cout << srcfile << "read failed " << endl;
-    else
-        cout << srcfile << "is too large" << endl;
-
-    // create the shader Object
-    GLuint shader = glCreateShader(shaderType);
+    // Create the shader Object
+    GLuint shader = glCreateShader (shaderType);
     if (0 == shader)
         cerr << "Error creating vertex shader." << endl;
 
-    // cout << shaderCode << endl;
-    // cout << endl;
-    const GLchar* codeArray[] = {shaderCode};
-    glShaderSource(shader, 1, codeArray, NULL);
-    free(shaderCode);
+    {
+        // Many concatenated lines, each properly terminated:
+        char* shaderCode = slurp0 (srcfile);
+
+        // cout << shaderCode << endl;
+        // cout << endl;
+        const GLchar* codeArray[] = {shaderCode};
+        glShaderSource (shader, 1, codeArray, NULL);
+
+        free (shaderCode);
+    }
 
     // compile the shader
-    glCompileShader(shader);
-    if (GL_FALSE == compileCheck(shader))
+    glCompileShader (shader);
+    if (GL_FALSE == compileCheck (shader))
         cerr << "shader compilation failed" << endl;
 
     return shader;
