@@ -142,26 +142,35 @@ void drawBox(GLenum glFaces)
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLuint *)NULL);
     glDisable(GL_CULL_FACE);
 }
-// check the compilation result
-GLboolean compileCheck(GLuint shader)
+
+
+// Check the compilation result. Print errors and eventual warnings to
+// stderr:
+GLboolean compileCheck (GLuint shader)
 {
     GLint err;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &err);
-    if (GL_FALSE == err)
+    glGetShaderiv (shader, GL_COMPILE_STATUS, &err);
+
+    // Print errors *and* warnings to stderr unconditionally, not only
+    // if (GL_FALSE == err)
     {
+        // Number  of characters  in  the information  log for  shader
+        // *including* the null termination character:
 	GLint logLen;
-	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLen);
-	if (logLen > 0)
+	glGetShaderiv (shader, GL_INFO_LOG_LENGTH, &logLen);
+
+	if (logLen > 1)
 	{
-	    char* log = (char *)malloc(logLen);
+	    char* log = (char *) malloc (logLen);
 	    GLsizei written;
-	    glGetShaderInfoLog(shader, logLen, &written, log);
+	    glGetShaderInfoLog (shader, logLen, &written, log);
 	    cerr << "Shader log: " << log << endl;
-	    free(log);
+	    free (log);
 	}
     }
     return err;
 }
+
 // init shader object
 GLuint initShaderObj(const GLchar* srcfile, GLenum shaderType)
 {
