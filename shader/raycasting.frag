@@ -75,9 +75,10 @@ void main()
         }
         voxelCoord += deltaDir;
         lengthAcum += deltaDirLen;
-        if (lengthAcum >= len )
+        if (lengthAcum >= len)
         {
-            colorAcum.rgb = colorAcum.rgb*colorAcum.a + (1 - colorAcum.a)*bgColor.rgb;
+            // Builtin mix (bg, fg, a) == (1 - a) * bg + a * fg:
+            colorAcum.rgb = mix (bgColor.rgb, colorAcum.rgb, colorAcum.a);
             // Terminate  if opacity  > 1  or the  ray is  outside the
             // volume:
             break;
