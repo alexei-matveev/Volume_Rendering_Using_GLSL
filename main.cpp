@@ -156,7 +156,7 @@ void drawBox(GLenum glFaces)
 
 
 // Check the compilation result. Print errors and eventual warnings to
-// stderr:
+// stderr. See also checkShaderLinkStatus().
 static
 GLboolean compileCheck (GLuint shader)
 {
@@ -234,20 +234,27 @@ GLuint initShaderObj(const GLchar* srcfile, GLenum shaderType)
 }
 
 
+// Check the result of linking.  Print errors and eventual warnings to
+// stderr. See also compileCheck().
 static
-GLint checkShaderLinkStatus(GLuint pgmHandle)
+GLint checkShaderLinkStatus (GLuint pgmHandle)
 {
     GLint status;
-    glGetProgramiv(pgmHandle, GL_LINK_STATUS, &status);
-    if (GL_FALSE == status)
+    glGetProgramiv (pgmHandle, GL_LINK_STATUS, &status);
+
+    // Print errors *and* warnings to stderr unconditionally, not only
+    // if (GL_FALSE == status)
     {
+        // Number of characters in the information log for *including*
+        // the null termination character:
         GLint logLen;
-        glGetProgramiv(pgmHandle, GL_INFO_LOG_LENGTH, &logLen);
-        if (logLen > 0)
+        glGetProgramiv (pgmHandle, GL_INFO_LOG_LENGTH, &logLen);
+
+        if (logLen > 1)
         {
-            GLchar * log = (GLchar *)malloc(logLen);
+            GLchar * log = (GLchar *) malloc(logLen);
             GLsizei written;
-            glGetProgramInfoLog(pgmHandle, logLen, &written, log);
+            glGetProgramInfoLog (pgmHandle, logLen, &written, log);
             cerr << "Program log: " << log << endl;
         }
     }
