@@ -35,6 +35,7 @@ GLuint g_bfFragHandle;
 float g_stepSize = 0.001f;
 
 
+static
 int checkForOpenGLError(const char* file, int line)
 {
     // return 1 if an OpenGL error occured, 0 otherwise.
@@ -51,15 +52,19 @@ int checkForOpenGLError(const char* file, int line)
     }
     return retCode;
 }
-void keyboard(unsigned char key, int x, int y);
-void display(void);
-void initVBO();
-void initShader();
-void initFrameBuffer(GLuint, GLuint, GLuint);
-GLuint initTFF1DTex(const char* filename);
-GLuint initFace2DTex(GLuint texWidth, GLuint texHeight);
-GLuint initVol3DTex(const char* filename, GLuint width, GLuint height, GLuint depth);
-void render(GLenum cullFace);
+
+static void keyboard(unsigned char key, int x, int y);
+static void display(void);
+static void initVBO();
+static void initShader();
+static void initFrameBuffer(GLuint, GLuint, GLuint);
+static GLuint initTFF1DTex(const char* filename);
+static GLuint initFace2DTex(GLuint texWidth, GLuint texHeight);
+static GLuint initVol3DTex(const char* filename, GLuint width, GLuint height, GLuint depth);
+static void render(GLenum cullFace);
+
+
+static
 void init()
 {
     g_texWidth = g_winWidth;
@@ -73,7 +78,10 @@ void init()
     initFrameBuffer(g_bfTexObj, g_texWidth, g_texHeight);
     GL_ERROR();
 }
+
+
 // init the vertex buffer object
+static
 void initVBO()
 {
     GLfloat vertices[24] = {
@@ -134,6 +142,9 @@ void initVBO()
     // glBindVertexArray(0);
     g_vao = vao;
 }
+
+
+static
 void drawBox(GLenum glFaces)
 {
     glEnable(GL_CULL_FACE);
@@ -146,6 +157,7 @@ void drawBox(GLenum glFaces)
 
 // Check the compilation result. Print errors and eventual warnings to
 // stderr:
+static
 GLboolean compileCheck (GLuint shader)
 {
     GLint err;
@@ -171,7 +183,9 @@ GLboolean compileCheck (GLuint shader)
     return err;
 }
 
+
 // init shader object
+static
 GLuint initShaderObj(const GLchar* srcfile, GLenum shaderType)
 {
     ifstream inFile(srcfile, ifstream::in);
@@ -218,6 +232,9 @@ GLuint initShaderObj(const GLchar* srcfile, GLenum shaderType)
     }
     return shader;
 }
+
+
+static
 GLint checkShaderLinkStatus(GLuint pgmHandle)
 {
     GLint status;
@@ -236,7 +253,10 @@ GLint checkShaderLinkStatus(GLuint pgmHandle)
     }
     return status;
 }
+
+
 // link shader program
+static
 GLuint createShaderPgm()
 {
     // Create the shader program
@@ -251,6 +271,7 @@ GLuint createShaderPgm()
 
 
 // init the 1 dimentional texture for transfer function
+static
 GLuint initTFF1DTex(const char* filename)
 {
     // read in the user defined data of transfer function
@@ -289,7 +310,10 @@ GLuint initTFF1DTex(const char* filename)
     free(tff);
     return tff1DTex;
 }
+
+
 // init the 2D texture for render backface 'bf' stands for backface
+static
 GLuint initFace2DTex(GLuint bfTexWidth, GLuint bfTexHeight)
 {
     GLuint backFace2DTex;
@@ -302,7 +326,10 @@ GLuint initFace2DTex(GLuint bfTexWidth, GLuint bfTexHeight)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, bfTexWidth, bfTexHeight, 0, GL_RGBA, GL_FLOAT, NULL);
     return backFace2DTex;
 }
+
+
 // init 3D texture to store the volume data used fo ray casting
+static
 GLuint initVol3DTex(const char* filename, GLuint w, GLuint h, GLuint d)
 {
 
@@ -346,6 +373,8 @@ GLuint initVol3DTex(const char* filename, GLuint w, GLuint h, GLuint d)
     return g_volTexObj;
 }
 
+
+static
 void checkFramebufferStatus()
 {
     GLenum complete = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -355,7 +384,10 @@ void checkFramebufferStatus()
         exit(EXIT_FAILURE);
     }
 }
+
+
 // init the framebuffer, the only framebuffer used in this program
+static
 void initFrameBuffer(GLuint texObj, GLuint texWidth, GLuint texHeight)
 {
     // create a depth buffer for our framebuffer
@@ -373,6 +405,8 @@ void initFrameBuffer(GLuint texObj, GLuint texWidth, GLuint texHeight)
     glEnable(GL_DEPTH_TEST);
 }
 
+
+static
 void rcSetUinforms()
 {
     // setting uniforms such as
@@ -448,7 +482,10 @@ void rcSetUinforms()
     }
 
 }
+
+
 // init the shader object and shader program
+static
 void initShader()
 {
 // vertex shader object for first pass
@@ -465,7 +502,9 @@ void initShader()
     // [original: 获得由着色器编译器分配的索引 (可选)]
 }
 
+
 // link the shader objects using the shader program
+static
 void linkShader(GLuint shaderPgm, GLuint newVertHandle, GLuint newFragHandle)
 {
     const GLsizei maxCount = 2;
@@ -511,6 +550,7 @@ void linkShader(GLuint shaderPgm, GLuint newVertHandle, GLuint newFragHandle)
 // as well as the location of primitives.
 // the most important is that we got the GLSL to exec the logic. Here we go!
 // draw the back face of the box
+static
 void display()
 {
     glEnable(GL_DEPTH_TEST);
@@ -563,11 +603,14 @@ void display()
     // GL_ERROR();
     glutSwapBuffers();
 }
+
+
 // both of the two pass use the "render() function"
 // the first pass render the backface of the boundbox
 // the second pass render the frontface of the boundbox
 // together with the frontface, use the backface as a 2D texture in the second pass
 // to calculate the entry point and the exit point of the ray in and out the box.
+static
 void render(GLenum cullFace)
 {
     GL_ERROR();
@@ -599,11 +642,17 @@ void render(GLenum cullFace)
     GL_ERROR();
     // glutWireTeapot(0.5);
 }
+
+
+static
 void rotateDisplay()
 {
     g_angle = (g_angle + 1) % 360;
     glutPostRedisplay();
 }
+
+
+static
 void reshape(int w, int h)
 {
     g_winWidth = w;
@@ -612,6 +661,8 @@ void reshape(int w, int h)
     g_texHeight = h;
 }
 
+
+static
 void keyboard(unsigned char key, int x, int y)
 {
     switch (key)
@@ -622,6 +673,7 @@ void keyboard(unsigned char key, int x, int y)
         break;
     }
 }
+
 
 int main(int argc, char** argv)
 {
