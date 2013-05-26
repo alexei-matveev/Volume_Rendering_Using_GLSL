@@ -404,18 +404,14 @@ void rcSetUinforms()
     if (screenSizeLoc >= 0)
         glUniform2f(screenSizeLoc, (float)g_winWidth, (float)g_winHeight);
     else
-        cout << "ScreenSize"
-             << "is not bind to the uniform"
-             << endl;
+        cout << "ScreenSize is not bound to the uniform" << endl;
 
     GLint stepSizeLoc = glGetUniformLocation(g_programHandle, "StepSize");
     GL_ERROR();
     if (stepSizeLoc >= 0)
         glUniform1f(stepSizeLoc, g_stepSize);
     else
-        cout << "StepSize"
-             << "is not bind to the uniform"
-             << endl;
+        cout << "StepSize is not bound to the uniform" << endl;
 
     GL_ERROR();
     GLint transferFuncLoc = glGetUniformLocation(g_programHandle, "TransferFunc");
@@ -426,9 +422,7 @@ void rcSetUinforms()
         glUniform1i(transferFuncLoc, 0);
     }
     else
-        cout << "TransferFunc"
-             << "is not bind to the uniform"
-             << endl;
+        cout << "TransferFunc is not bound to the uniform" << endl;
 
     GL_ERROR();
     GLint backFaceLoc = glGetUniformLocation(g_programHandle, "ExitPoints");
@@ -439,9 +433,7 @@ void rcSetUinforms()
         glUniform1i(backFaceLoc, 1);
     }
     else
-        cout << "ExitPoints"
-             << "is not bind to the uniform"
-             << endl;
+        cout << "ExitPoints is not bound to the uniform" << endl;
 
     GL_ERROR();
     GLint volumeLoc = glGetUniformLocation(g_programHandle, "VolumeTex");
@@ -452,9 +444,7 @@ void rcSetUinforms()
         glUniform1i(volumeLoc, 2);
     }
     else
-        cout << "VolumeTex"
-             << "is not bind to the uniform"
-             << endl;
+        cout << "VolumeTex is not bound to the uniform" << endl;
 }
 
 
