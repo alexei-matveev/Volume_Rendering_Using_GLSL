@@ -1,5 +1,9 @@
 // Eliminating (avoid?) unused variables to prevent bugs. [original: 杜
 // 绝声明未使用的变量，避免bug的产生。]
+//
+// FIXME:  The  #version  directive  must  occur in  a  shader  before
+// anything else, except for comments and white space.
+//
 #if __VERSION__ >= 400
 #version 400
 #define LAYOUT_LOCATION(n) layout(location = n)
