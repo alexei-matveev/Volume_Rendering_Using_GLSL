@@ -25,8 +25,6 @@ static GLuint g_frameBuffer;
 // transfer function
 static GLuint g_tffTexObj;
 static GLuint g_bfTexObj;
-static GLuint g_texWidth;
-static GLuint g_texHeight;
 static GLuint g_volTexObj;
 static GLuint g_rcVertHandle;
 static GLuint g_rcFragHandle;
@@ -621,8 +619,6 @@ void reshape(int w, int h)
 {
     g_winWidth = w;
     g_winHeight = h;
-    g_texWidth = w;
-    g_texHeight = h;
 }
 
 
@@ -642,15 +638,15 @@ void keyboard(unsigned char key, int x, int y)
 static
 void init()
 {
-    g_texWidth = g_winWidth;
-    g_texHeight = g_winHeight;
+    const GLuint g_texWidth = g_winWidth;
+    const GLuint g_texHeight = g_winHeight;
     g_vao = init_vertex_objects ();
     initShader();
     g_tffTexObj = initTFF1DTex("tff.dat");
-    g_bfTexObj = initFace2DTex(g_texWidth, g_texHeight);
+    g_bfTexObj = initFace2DTex (g_texWidth, g_texHeight);
     g_volTexObj = initVol3DTex ("head256.raw", 256, 256, 225);
     GL_ERROR();
-    initFrameBuffer(g_bfTexObj, g_texWidth, g_texHeight);
+    initFrameBuffer (g_bfTexObj, g_texWidth, g_texHeight);
     GL_ERROR();
 }
 
