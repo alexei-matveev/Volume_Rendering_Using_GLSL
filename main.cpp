@@ -44,10 +44,10 @@ int checkForOpenGLError(const char* file, int line)
     glErr = glGetError();
     while(glErr != GL_NO_ERROR)
     {
-	cout << "glError in file " << file
-	     << "@line " << line << gluErrorString(glErr) << endl;
-	retCode = 1;
-	exit(EXIT_FAILURE);
+        cout << "glError in file " << file
+             << "@line " << line << gluErrorString(glErr) << endl;
+        retCode = 1;
+        exit(EXIT_FAILURE);
     }
     return retCode;
 }
@@ -77,14 +77,14 @@ void init()
 void initVBO()
 {
     GLfloat vertices[24] = {
-	0.0, 0.0, 0.0,
-	0.0, 0.0, 1.0,
-	0.0, 1.0, 0.0,
-	0.0, 1.0, 1.0,
-	1.0, 0.0, 0.0,
-	1.0, 0.0, 1.0,
-	1.0, 1.0, 0.0,
-	1.0, 1.0, 1.0
+        0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0,
+        0.0, 1.0, 0.0,
+        0.0, 1.0, 1.0,
+        1.0, 0.0, 0.0,
+        1.0, 0.0, 1.0,
+        1.0, 1.0, 0.0,
+        1.0, 1.0, 1.0
     };
 // draw the six faces of the boundbox by drawwing triangles
 // draw it contra-clockwise
@@ -95,18 +95,18 @@ void initVBO()
 // up: 2 3 7 6
 // down: 1 0 4 5
     GLuint indices[36] = {
-	1,5,7,
-	7,3,1,
-	0,2,6,
+        1,5,7,
+        7,3,1,
+        0,2,6,
         6,4,0,
-	0,1,3,
-	3,2,0,
-	7,5,4,
-	4,6,7,
-	2,3,7,
-	7,6,2,
-	1,0,4,
-	4,5,1
+        0,1,3,
+        3,2,0,
+        7,5,4,
+        4,6,7,
+        2,3,7,
+        7,6,2,
+        1,0,4,
+        4,5,1
     };
     GLuint gbo[2];
 
@@ -156,17 +156,17 @@ GLboolean compileCheck (GLuint shader)
     {
         // Number  of characters  in  the information  log for  shader
         // *including* the null termination character:
-	GLint logLen;
-	glGetShaderiv (shader, GL_INFO_LOG_LENGTH, &logLen);
+        GLint logLen;
+        glGetShaderiv (shader, GL_INFO_LOG_LENGTH, &logLen);
 
-	if (logLen > 1)
-	{
-	    char* log = (char *) malloc (logLen);
-	    GLsizei written;
-	    glGetShaderInfoLog (shader, logLen, &written, log);
-	    cerr << "Shader log: " << log << endl;
-	    free (log);
-	}
+        if (logLen > 1)
+        {
+            char* log = (char *) malloc (logLen);
+            GLsizei written;
+            glGetShaderInfoLog (shader, logLen, &written, log);
+            cerr << "Shader log: " << log << endl;
+            free (log);
+        }
     }
     return err;
 }
@@ -178,8 +178,8 @@ GLuint initShaderObj(const GLchar* srcfile, GLenum shaderType)
     // use assert?
     if (!inFile)
     {
-	cerr << "Error openning file: " << srcfile << endl;
-	exit(EXIT_FAILURE);
+        cerr << "Error openning file: " << srcfile << endl;
+        exit(EXIT_FAILURE);
     }
 
     const int MAX_CNT = 10000;
@@ -187,22 +187,22 @@ GLuint initShaderObj(const GLchar* srcfile, GLenum shaderType)
     inFile.read(shaderCode, MAX_CNT);
     if (inFile.eof())
     {
-	size_t bytecnt = inFile.gcount();
-	*(shaderCode + bytecnt) = '\0';
+        size_t bytecnt = inFile.gcount();
+        *(shaderCode + bytecnt) = '\0';
     }
     else if(inFile.fail())
     {
-	cout << srcfile << "read failed " << endl;
+        cout << srcfile << "read failed " << endl;
     }
     else
     {
-	cout << srcfile << "is too large" << endl;
+        cout << srcfile << "is too large" << endl;
     }
     // create the shader Object
     GLuint shader = glCreateShader(shaderType);
     if (0 == shader)
     {
-	cerr << "Error creating vertex shader." << endl;
+        cerr << "Error creating vertex shader." << endl;
     }
     // cout << shaderCode << endl;
     // cout << endl;
@@ -214,7 +214,7 @@ GLuint initShaderObj(const GLchar* srcfile, GLenum shaderType)
     glCompileShader(shader);
     if (GL_FALSE == compileCheck(shader))
     {
-	cerr << "shader compilation failed" << endl;
+        cerr << "shader compilation failed" << endl;
     }
     return shader;
 }
@@ -224,15 +224,15 @@ GLint checkShaderLinkStatus(GLuint pgmHandle)
     glGetProgramiv(pgmHandle, GL_LINK_STATUS, &status);
     if (GL_FALSE == status)
     {
-	GLint logLen;
-	glGetProgramiv(pgmHandle, GL_INFO_LOG_LENGTH, &logLen);
-	if (logLen > 0)
-	{
-	    GLchar * log = (GLchar *)malloc(logLen);
-	    GLsizei written;
-	    glGetProgramInfoLog(pgmHandle, logLen, &written, log);
-	    cerr << "Program log: " << log << endl;
-	}
+        GLint logLen;
+        glGetProgramiv(pgmHandle, GL_INFO_LOG_LENGTH, &logLen);
+        if (logLen > 0)
+        {
+            GLchar * log = (GLchar *)malloc(logLen);
+            GLsizei written;
+            glGetProgramInfoLog(pgmHandle, logLen, &written, log);
+            cerr << "Program log: " << log << endl;
+        }
     }
     return status;
 }
@@ -243,8 +243,8 @@ GLuint createShaderPgm()
     GLuint programHandle = glCreateProgram();
     if (0 == programHandle)
     {
-	cerr << "Error create shader program" << endl;
-	exit(EXIT_FAILURE);
+        cerr << "Error create shader program" << endl;
+        exit(EXIT_FAILURE);
     }
     return programHandle;
 }
@@ -257,8 +257,8 @@ GLuint initTFF1DTex(const char* filename)
     ifstream inFile(filename, ifstream::in);
         if (!inFile)
     {
-	cerr << "Error openning file: " << filename << endl;
-	exit(EXIT_FAILURE);
+        cerr << "Error openning file: " << filename << endl;
+        exit(EXIT_FAILURE);
     }
 
     const int MAX_CNT = 10000;
@@ -266,17 +266,17 @@ GLuint initTFF1DTex(const char* filename)
     inFile.read(reinterpret_cast<char *>(tff), MAX_CNT);
     if (inFile.eof())
     {
-	size_t bytecnt = inFile.gcount();
-	*(tff + bytecnt) = '\0';
-	cout << "bytecnt " << bytecnt << endl;
+        size_t bytecnt = inFile.gcount();
+        *(tff + bytecnt) = '\0';
+        cout << "bytecnt " << bytecnt << endl;
     }
     else if(inFile.fail())
     {
-	cout << filename << "read failed " << endl;
+        cout << filename << "read failed " << endl;
     }
     else
     {
-	cout << filename << "is too large" << endl;
+        cout << filename << "is too large" << endl;
     }
     GLuint tff1DTex;
     glGenTextures(1, &tff1DTex);
@@ -308,7 +308,7 @@ GLuint initVol3DTex(const char* filename, GLuint w, GLuint h, GLuint d)
 
     FILE *fp;
     size_t size = w * h * d;
-    GLubyte *data = new GLubyte[size];			  // 8bit
+    GLubyte *data = new GLubyte[size];                    // 8bit
     if (!(fp = fopen(filename, "rb")))
     {
         cout << "Error: opening .raw file failed" << endl;
@@ -351,8 +351,8 @@ void checkFramebufferStatus()
     GLenum complete = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (complete != GL_FRAMEBUFFER_COMPLETE)
     {
-	cout << "framebuffer is not complete" << endl;
-	exit(EXIT_FAILURE);
+        cout << "framebuffer is not complete" << endl;
+        exit(EXIT_FAILURE);
     }
 }
 // init the framebuffer, the only framebuffer used in this program
@@ -384,67 +384,67 @@ void rcSetUinforms()
     GLint screenSizeLoc = glGetUniformLocation(g_programHandle, "ScreenSize");
     if (screenSizeLoc >= 0)
     {
-	glUniform2f(screenSizeLoc, (float)g_winWidth, (float)g_winHeight);
+        glUniform2f(screenSizeLoc, (float)g_winWidth, (float)g_winHeight);
     }
     else
     {
-	cout << "ScreenSize"
-	     << "is not bind to the uniform"
-	     << endl;
+        cout << "ScreenSize"
+             << "is not bind to the uniform"
+             << endl;
     }
     GLint stepSizeLoc = glGetUniformLocation(g_programHandle, "StepSize");
     GL_ERROR();
     if (stepSizeLoc >= 0)
     {
-	glUniform1f(stepSizeLoc, g_stepSize);
+        glUniform1f(stepSizeLoc, g_stepSize);
     }
     else
     {
-	cout << "StepSize"
-	     << "is not bind to the uniform"
-	     << endl;
+        cout << "StepSize"
+             << "is not bind to the uniform"
+             << endl;
     }
     GL_ERROR();
     GLint transferFuncLoc = glGetUniformLocation(g_programHandle, "TransferFunc");
     if (transferFuncLoc >= 0)
     {
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_1D, g_tffTexObj);
-	glUniform1i(transferFuncLoc, 0);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_1D, g_tffTexObj);
+        glUniform1i(transferFuncLoc, 0);
     }
     else
     {
-	cout << "TransferFunc"
-	     << "is not bind to the uniform"
-	     << endl;
+        cout << "TransferFunc"
+             << "is not bind to the uniform"
+             << endl;
     }
     GL_ERROR();
     GLint backFaceLoc = glGetUniformLocation(g_programHandle, "ExitPoints");
     if (backFaceLoc >= 0)
     {
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, g_bfTexObj);
-	glUniform1i(backFaceLoc, 1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, g_bfTexObj);
+        glUniform1i(backFaceLoc, 1);
     }
     else
     {
-	cout << "ExitPoints"
-	     << "is not bind to the uniform"
-	     << endl;
+        cout << "ExitPoints"
+             << "is not bind to the uniform"
+             << endl;
     }
     GL_ERROR();
     GLint volumeLoc = glGetUniformLocation(g_programHandle, "VolumeTex");
     if (volumeLoc >= 0)
     {
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_3D, g_volTexObj);
-	glUniform1i(volumeLoc, 2);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_3D, g_volTexObj);
+        glUniform1i(volumeLoc, 2);
     }
     else
     {
-	cout << "VolumeTex"
-	     << "is not bind to the uniform"
-	     << endl;
+        cout << "VolumeTex"
+             << "is not bind to the uniform"
+             << endl;
     }
 
 }
@@ -476,7 +476,7 @@ void linkShader(GLuint shaderPgm, GLuint newVertHandle, GLuint newFragHandle)
     // cout << "get FragHandle: " << shaders[1] << endl;
     GL_ERROR();
     for (int i = 0; i < count; i++) {
-	glDetachShader(shaderPgm, shaders[i]);
+        glDetachShader(shaderPgm, shaders[i]);
     }
     // Bind index 0 to the shader input variable "VerPos"
     glBindAttribLocation(shaderPgm, 0, "VerPos");
@@ -489,8 +489,8 @@ void linkShader(GLuint shaderPgm, GLuint newVertHandle, GLuint newFragHandle)
     glLinkProgram(shaderPgm);
     if (GL_FALSE == checkShaderLinkStatus(shaderPgm))
     {
-	cerr << "Failed to relink shader program!" << endl;
-	exit(EXIT_FAILURE);
+        cerr << "Failed to relink shader program!" << endl;
+        exit(EXIT_FAILURE);
     }
     GL_ERROR();
 }
@@ -558,7 +558,7 @@ void display()
     // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // GL_ERROR();
     // glBlitFramebuffer(0, 0, g_winWidth, g_winHeight,0, 0,
-    // 		      g_winWidth, g_winHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    //                g_winWidth, g_winHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     // glBindFramebuffer(GL_FRAMEBUFFER, 0);
     // GL_ERROR();
     glutSwapBuffers();
@@ -576,8 +576,8 @@ void render(GLenum cullFace)
     //  transform the box
     glm::mat4 projection = glm::perspective(60.0f, (GLfloat)g_winWidth/g_winHeight, 0.1f, 400.f);
     glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f),
-    				 glm::vec3(0.0f, 0.0f, 0.0f),
-    				 glm::vec3(0.0f, 1.0f, 0.0f));
+                                 glm::vec3(0.0f, 0.0f, 0.0f),
+                                 glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 model = mat4(1.0f);
     model *= glm::rotate((float)g_angle, glm::vec3(0.0f, 1.0f, 0.0f));
     // to make the "head256.raw" i.e. the volume data stand up.
@@ -588,11 +588,11 @@ void render(GLenum cullFace)
     GLuint mvpIdx = glGetUniformLocation(g_programHandle, "MVP");
     if (mvpIdx >= 0)
     {
-    	glUniformMatrix4fv(mvpIdx, 1, GL_FALSE, &mvp[0][0]);
+        glUniformMatrix4fv(mvpIdx, 1, GL_FALSE, &mvp[0][0]);
     }
     else
     {
-    	cerr << "can't get the MVP" << endl;
+        cerr << "can't get the MVP" << endl;
     }
     GL_ERROR();
     drawBox(cullFace);
@@ -618,8 +618,8 @@ void keyboard(unsigned char key, int x, int y)
     {
     case 'q':
     case '\x1B':
-	exit(EXIT_SUCCESS);
-	break;
+        exit(EXIT_SUCCESS);
+        break;
     }
 }
 
@@ -633,8 +633,8 @@ int main(int argc, char** argv)
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {
-	/* Problem: glewInit failed, something is seriously wrong. */
-	fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+        /* Problem: glewInit failed, something is seriously wrong. */
+        fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
     }
 
     glutKeyboardFunc(&keyboard);
