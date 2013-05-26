@@ -45,8 +45,8 @@ int checkForOpenGLError(const char* file, int line)
     glErr = glGetError();
     while(glErr != GL_NO_ERROR)
     {
-        cout << "glError in file " << file
-             << "@line " << line << gluErrorString(glErr) << endl;
+        cout << "glError in file " << file << "@line " << line << ": "
+             << gluErrorString(glErr) << endl;
         retCode = 1;
         exit(EXIT_FAILURE);
     }
