@@ -193,19 +193,15 @@ GLuint initShaderObj(const GLchar* srcfile, GLenum shaderType)
         *(shaderCode + bytecnt) = '\0';
     }
     else if(inFile.fail())
-    {
         cout << srcfile << "read failed " << endl;
-    }
     else
-    {
         cout << srcfile << "is too large" << endl;
-    }
+
     // create the shader Object
     GLuint shader = glCreateShader(shaderType);
     if (0 == shader)
-    {
         cerr << "Error creating vertex shader." << endl;
-    }
+
     // cout << shaderCode << endl;
     // cout << endl;
     const GLchar* codeArray[] = {shaderCode};
@@ -215,9 +211,8 @@ GLuint initShaderObj(const GLchar* srcfile, GLenum shaderType)
     // compile the shader
     glCompileShader(shader);
     if (GL_FALSE == compileCheck(shader))
-    {
         cerr << "shader compilation failed" << endl;
-    }
+
     return shader;
 }
 
@@ -271,7 +266,7 @@ GLuint initTFF1DTex(const char* filename)
 {
     // read in the user defined data of transfer function
     ifstream inFile(filename, ifstream::in);
-        if (!inFile)
+    if (!inFile)
     {
         cerr << "Error openning file: " << filename << endl;
         exit(EXIT_FAILURE);
@@ -287,13 +282,10 @@ GLuint initTFF1DTex(const char* filename)
         cout << "bytecnt " << bytecnt << endl;
     }
     else if(inFile.fail())
-    {
         cout << filename << "read failed " << endl;
-    }
     else
-    {
         cout << filename << "is too large" << endl;
-    }
+
     GLuint tff1DTex;
     glGenTextures(1, &tff1DTex);
     glBindTexture(GL_TEXTURE_1D, tff1DTex);
@@ -337,18 +329,16 @@ GLuint initVol3DTex(const char* filename, GLuint w, GLuint h, GLuint d)
         exit(EXIT_FAILURE);
     }
     else
-    {
         cout << "OK: open .raw file successed" << endl;
-    }
+
     if ( fread(data, sizeof(char), size, fp)!= size)
     {
         cout << "Error: read .raw file failed" << endl;
         exit(1);
     }
     else
-    {
         cout << "OK: read .raw file successed" << endl;
-    }
+
     fclose(fp);
 
     glGenTextures(1, &g_volTexObj);
@@ -412,27 +402,21 @@ void rcSetUinforms()
     // VolumeTex the texture that hold the volume data i.e. head256.raw
     GLint screenSizeLoc = glGetUniformLocation(g_programHandle, "ScreenSize");
     if (screenSizeLoc >= 0)
-    {
         glUniform2f(screenSizeLoc, (float)g_winWidth, (float)g_winHeight);
-    }
     else
-    {
         cout << "ScreenSize"
              << "is not bind to the uniform"
              << endl;
-    }
+
     GLint stepSizeLoc = glGetUniformLocation(g_programHandle, "StepSize");
     GL_ERROR();
     if (stepSizeLoc >= 0)
-    {
         glUniform1f(stepSizeLoc, g_stepSize);
-    }
     else
-    {
         cout << "StepSize"
              << "is not bind to the uniform"
              << endl;
-    }
+
     GL_ERROR();
     GLint transferFuncLoc = glGetUniformLocation(g_programHandle, "TransferFunc");
     if (transferFuncLoc >= 0)
@@ -442,11 +426,10 @@ void rcSetUinforms()
         glUniform1i(transferFuncLoc, 0);
     }
     else
-    {
         cout << "TransferFunc"
              << "is not bind to the uniform"
              << endl;
-    }
+
     GL_ERROR();
     GLint backFaceLoc = glGetUniformLocation(g_programHandle, "ExitPoints");
     if (backFaceLoc >= 0)
@@ -456,11 +439,10 @@ void rcSetUinforms()
         glUniform1i(backFaceLoc, 1);
     }
     else
-    {
         cout << "ExitPoints"
              << "is not bind to the uniform"
              << endl;
-    }
+
     GL_ERROR();
     GLint volumeLoc = glGetUniformLocation(g_programHandle, "VolumeTex");
     if (volumeLoc >= 0)
@@ -470,12 +452,9 @@ void rcSetUinforms()
         glUniform1i(volumeLoc, 2);
     }
     else
-    {
         cout << "VolumeTex"
              << "is not bind to the uniform"
              << endl;
-    }
-
 }
 
 
@@ -509,9 +488,9 @@ void linkShader(GLuint shaderPgm, GLuint newVertHandle, GLuint newFragHandle)
     // cout << "get VertHandle: " << shaders[0] << endl;
     // cout << "get FragHandle: " << shaders[1] << endl;
     GL_ERROR();
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++)
         glDetachShader(shaderPgm, shaders[i]);
-    }
+
     // Bind index 0 to the shader input variable "VerPos"
     glBindAttribLocation(shaderPgm, 0, "VerPos");
     // Bind index 1 to the shader input variable "VerClr"
@@ -555,13 +534,10 @@ void render(GLenum cullFace)
     glm::mat4 mvp = projection * view * model;
     GLuint mvpIdx = glGetUniformLocation(g_programHandle, "MVP");
     if (mvpIdx >= 0)
-    {
         glUniformMatrix4fv(mvpIdx, 1, GL_FALSE, &mvp[0][0]);
-    }
     else
-    {
         cerr << "can't get the MVP" << endl;
-    }
+
     GL_ERROR();
     drawBox(cullFace);
     GL_ERROR();
@@ -696,10 +672,8 @@ int main(int argc, char** argv)
     glutCreateWindow("GLUT Test");
     GLenum err = glewInit();
     if (GLEW_OK != err)
-    {
         /* Problem: glewInit failed, something is seriously wrong. */
         fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-    }
 
     glutKeyboardFunc(&keyboard);
     glutDisplayFunc(&display);
@@ -707,6 +681,7 @@ int main(int argc, char** argv)
     glutIdleFunc(&rotateDisplay);
     init();
     glutMainLoop();
+    /* NOTREACHED */
     return EXIT_SUCCESS;
 }
 
