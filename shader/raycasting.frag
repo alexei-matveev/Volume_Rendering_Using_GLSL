@@ -47,7 +47,7 @@ void main()
     float deltaDirLen = length(deltaDir);
     vec3 voxelCoord = EntryPoint;
     vec4 colorAcum = vec4(0.0); // The dest color
-    float alphaAcum = 0.0;      // The  dest alpha for blending
+
     // Define coordinates for color searching. [original: 定义颜色查找
     // 的坐标]
     float lengthAcum = 0.0;
