@@ -16,23 +16,23 @@
 using namespace std;
 using glm::mat4;
 using glm::vec3;
-GLuint g_vao;
-GLuint g_programHandle;
-GLuint g_winWidth = 400;
-GLuint g_winHeight = 400;
-GLint g_angle = 0;
-GLuint g_frameBuffer;
+static GLuint g_vao;
+static GLuint g_programHandle;
+static GLuint g_winWidth = 400;
+static GLuint g_winHeight = 400;
+static GLint g_angle = 0;
+static GLuint g_frameBuffer;
 // transfer function
-GLuint g_tffTexObj;
-GLuint g_bfTexObj;
-GLuint g_texWidth;
-GLuint g_texHeight;
-GLuint g_volTexObj;
-GLuint g_rcVertHandle;
-GLuint g_rcFragHandle;
-GLuint g_bfVertHandle;
-GLuint g_bfFragHandle;
-float g_stepSize = 0.001f;
+static GLuint g_tffTexObj;
+static GLuint g_bfTexObj;
+static GLuint g_texWidth;
+static GLuint g_texHeight;
+static GLuint g_volTexObj;
+static GLuint g_rcVertHandle;
+static GLuint g_rcFragHandle;
+static GLuint g_bfVertHandle;
+static GLuint g_bfFragHandle;
+static float g_stepSize = 0.001f;
 
 
 static
