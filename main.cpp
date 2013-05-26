@@ -638,15 +638,15 @@ void keyboard(unsigned char key, int x, int y)
 static
 void init()
 {
-    const GLuint g_texWidth = g_winWidth;
-    const GLuint g_texHeight = g_winHeight;
+    const GLuint texWidth = g_winWidth;
+    const GLuint texHeight = g_winHeight;
     g_vao = init_vertex_objects ();
     initShader();
-    g_tffTexObj = initTFF1DTex("tff.dat");
-    g_bfTexObj = initFace2DTex (g_texWidth, g_texHeight);
+    g_tffTexObj = initTFF1DTex ("tff.dat");
+    g_bfTexObj = initFace2DTex (texWidth, texHeight);
     g_volTexObj = initVol3DTex ("head256.raw", 256, 256, 225);
     GL_ERROR();
-    initFrameBuffer (g_bfTexObj, g_texWidth, g_texHeight);
+    initFrameBuffer (g_bfTexObj, texWidth, texHeight);
     GL_ERROR();
 }
 
