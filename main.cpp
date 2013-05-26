@@ -54,9 +54,11 @@ int checkForOpenGLError(const char* file, int line)
 }
 
 
-// Init the vertex buffer object:
+// Init the  vertex buffer object for  a surface (here a  surface of a
+// cube)  colored by  3d-position  of the  surface  point.  Returns  a
+// VAO. FIXME: leaks 2 VBOs.
 static
-void initVBO()
+GLuint init_vertex_objects ()
 {
     // Coordinates  of the  eight cube  corners which  are  also their
     // colors by the very construction:
@@ -125,7 +127,8 @@ void initVBO()
     glVertexAttribPointer (1, 3, GL_FLOAT, GL_FALSE, 0, (GLfloat *) NULL);
     glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, veridxdat);
     // glBindVertexArray(0);
-    g_vao = vao;
+
+    return vao;
 }
 
 
@@ -673,7 +676,7 @@ void init()
 {
     g_texWidth = g_winWidth;
     g_texHeight = g_winHeight;
-    initVBO();
+    g_vao = init_vertex_objects ();
     initShader();
     g_tffTexObj = initTFF1DTex("tff.dat");
     g_bfTexObj = initFace2DTex(g_texWidth, g_texHeight);
