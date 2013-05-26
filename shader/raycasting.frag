@@ -50,23 +50,20 @@ void main()
     float alphaAcum = 0.0;      // The  dest alpha for blending
     // Define coordinates for color searching. [original: 定义颜色查找
     // 的坐标]
-    float intensity;
     float lengthAcum = 0.0;
-    vec4 colorSample;           // The src color
-    float alphaSample;          // The src alpha
     // Background color
     vec4 bgColor = vec4(1.0, 1.0, 1.0, 0.0);
 
     for(int i = 0; i < 1600; i++)
     {
-        // Obtain    scalar     intensity    from    volume    texture
-        // data. [original: 获得体数据中的标量值 scaler value]
-        intensity =  texture(VolumeTex, voxelCoord).x;
+        // Obtain scalar intensity from volume texture data:
+        float intensity = texture (VolumeTex, voxelCoord).x;
 
-        // Look up  the values of  the transfer function  depending on
-        // the extracted volume texture intensity. [original: 查找传输
-        // 函数中映射后的值 依赖性纹理读取]
-        colorSample = texture(TransferFunc, intensity);
+        // Look up the value of the transfer function depending on the
+        // extracted volume texture  intensity.  This vec4 becomes the
+        // source color:
+        vec4 colorSample = texture (TransferFunc, intensity);
+
         // Modulate   the  value   of   colorSample.a.   Front-to-back
         // integration
         if (colorSample.a > 0.0) {
