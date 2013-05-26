@@ -80,65 +80,76 @@ void init()
 }
 
 
-// init the vertex buffer object
+// Init the vertex buffer object:
 static
 void initVBO()
 {
+    // Coordinates  of the  eight cube  corners which  are  also their
+    // colors by the very construction:
     GLfloat vertices[24] = {
-        0.0, 0.0, 0.0,
-        0.0, 0.0, 1.0,
-        0.0, 1.0, 0.0,
-        0.0, 1.0, 1.0,
-        1.0, 0.0, 0.0,
-        1.0, 0.0, 1.0,
-        1.0, 1.0, 0.0,
-        1.0, 1.0, 1.0
+        0.0, 0.0, 0.0,          // 0
+        0.0, 0.0, 1.0,          // 1
+        0.0, 1.0, 0.0,          // 2
+        0.0, 1.0, 1.0,          // 3
+        1.0, 0.0, 0.0,          // 4
+        1.0, 0.0, 1.0,          // 5
+        1.0, 1.0, 0.0,          // 6
+        1.0, 1.0, 1.0           // 7
     };
-// draw the six faces of the boundbox by drawwing triangles
-// draw it contra-clockwise
-// front: 1 5 7 3
-// back: 0 2 6 4
-// left: 0 1 3 2
-// right:7 5 4 6
-// up: 2 3 7 6
-// down: 1 0 4 5
+    // Draw the  six faces of  the bounding box by  drawing triangles.
+    // Draw it counter-clockwise.
+    //
+    // front: 1 5 7 3
+    // back:  0 2 6 4
+    // left:  0 1 3 2
+    // right: 7 5 4 6
+    // up:    2 3 7 6
+    // down:  1 0 4 5
     GLuint indices[36] = {
-        1,5,7,
-        7,3,1,
-        0,2,6,
-        6,4,0,
-        0,1,3,
-        3,2,0,
-        7,5,4,
-        4,6,7,
-        2,3,7,
-        7,6,2,
-        1,0,4,
-        4,5,1
+        1, 5, 7,
+        7, 3, 1,
+        0, 2, 6,
+        6, 4, 0,
+        0, 1, 3,
+        3, 2, 0,
+        7, 5, 4,
+        4, 6, 7,
+        2, 3, 7,
+        7, 6, 2,
+        1, 0, 4,
+        4, 5, 1
     };
-    GLuint gbo[2];
 
-    glGenBuffers(2, gbo);
+    // FIXME:   These  two   vertex  buffer   objects   (VBOs)  become
+    // inaccessible on return:
+    GLuint gbo[2];
+    glGenBuffers (2, gbo);
+
     GLuint vertexdat = gbo[0];
     GLuint veridxdat = gbo[1];
-    glBindBuffer(GL_ARRAY_BUFFER, vertexdat);
-    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer (GL_ARRAY_BUFFER, vertexdat);
+    glBufferData (GL_ARRAY_BUFFER, 24 * sizeof (GLfloat), vertices, GL_STATIC_DRAW);
     // used in glDrawElement()
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, veridxdat);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 36*sizeof(GLuint), indices, GL_STATIC_DRAW);
+    glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, veridxdat);
+    glBufferData (GL_ELEMENT_ARRAY_BUFFER, 36 * sizeof(GLuint), indices, GL_STATIC_DRAW);
 
+    // A vertex array  object (VAO) is like a  closure binding several
+    // buffer  objects.   Here  ---  the vertex  locations  and  their
+    // colors:
     GLuint vao;
-    glGenVertexArrays(1, &vao);
-    // vao like a closure binding 3 buffer object: verlocdat vercoldat and veridxdat
-    glBindVertexArray(vao);
-    glEnableVertexAttribArray(0); // for vertexloc
-    glEnableVertexAttribArray(1); // for vertexcol
+    glGenVertexArrays (1, &vao);
+    glBindVertexArray (vao);
+    glEnableVertexAttribArray (0); // for vertex location
+    glEnableVertexAttribArray (1); // for vertex color
 
-    // the vertex location is the same as the vertex color
-    glBindBuffer(GL_ARRAY_BUFFER, vertexdat);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLfloat *)NULL);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (GLfloat *)NULL);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, veridxdat);
+    // The vertex  location is the same  as the vertex  color. Use the
+    // same  buffer for  both  attributes (VerPos  and  VerClr in  the
+    // backface vertex shader):
+    glBindBuffer (GL_ARRAY_BUFFER, vertexdat);
+    glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, 0, (GLfloat *) NULL);
+    glVertexAttribPointer (1, 3, GL_FLOAT, GL_FALSE, 0, (GLfloat *) NULL);
+    glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, veridxdat);
     // glBindVertexArray(0);
     g_vao = vao;
 }
