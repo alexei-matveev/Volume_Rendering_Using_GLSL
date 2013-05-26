@@ -53,32 +53,6 @@ int checkForOpenGLError(const char* file, int line)
     return retCode;
 }
 
-static void keyboard(unsigned char key, int x, int y);
-static void display(void);
-static void initVBO();
-static void initShader();
-static void initFrameBuffer(GLuint, GLuint, GLuint);
-static GLuint initTFF1DTex(const char* filename);
-static GLuint initFace2DTex(GLuint texWidth, GLuint texHeight);
-static GLuint initVol3DTex(const char* filename, GLuint width, GLuint height, GLuint depth);
-static void render(GLenum cullFace);
-
-
-static
-void init()
-{
-    g_texWidth = g_winWidth;
-    g_texHeight = g_winHeight;
-    initVBO();
-    initShader();
-    g_tffTexObj = initTFF1DTex("tff.dat");
-    g_bfTexObj = initFace2DTex(g_texWidth, g_texHeight);
-    g_volTexObj = initVol3DTex("head256.raw", 256, 256, 225);
-    GL_ERROR();
-    initFrameBuffer(g_bfTexObj, g_texWidth, g_texHeight);
-    GL_ERROR();
-}
-
 
 // Init the vertex buffer object:
 static
@@ -552,6 +526,46 @@ void linkShader(GLuint shaderPgm, GLuint newVertHandle, GLuint newFragHandle)
     GL_ERROR();
 }
 
+
+// both of the two pass use the "render() function"
+// the first pass render the backface of the boundbox
+// the second pass render the frontface of the boundbox
+// together with the frontface, use the backface as a 2D texture in the second pass
+// to calculate the entry point and the exit point of the ray in and out the box.
+static
+void render(GLenum cullFace)
+{
+    GL_ERROR();
+    glClearColor(0.2f,0.2f,0.2f,1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //  transform the box
+    glm::mat4 projection = glm::perspective(60.0f, (GLfloat)g_winWidth/g_winHeight, 0.1f, 400.f);
+    glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f),
+                                 glm::vec3(0.0f, 0.0f, 0.0f),
+                                 glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 model = mat4(1.0f);
+    model *= glm::rotate((float)g_angle, glm::vec3(0.0f, 1.0f, 0.0f));
+    // to make the "head256.raw" i.e. the volume data stand up.
+    model *= glm::rotate(90.0f, vec3(1.0f, 0.0f, 0.0f));
+    model *= glm::translate(glm::vec3(-0.5f, -0.5f, -0.5f));
+    // notice the multiplication order: reverse order of transform
+    glm::mat4 mvp = projection * view * model;
+    GLuint mvpIdx = glGetUniformLocation(g_programHandle, "MVP");
+    if (mvpIdx >= 0)
+    {
+        glUniformMatrix4fv(mvpIdx, 1, GL_FALSE, &mvp[0][0]);
+    }
+    else
+    {
+        cerr << "can't get the MVP" << endl;
+    }
+    GL_ERROR();
+    drawBox(cullFace);
+    GL_ERROR();
+    // glutWireTeapot(0.5);
+}
+
+
 // the color of the vertex in the back face is also the location
 // of the vertex
 // save the back face to the user defined framebuffer bound
@@ -623,45 +637,6 @@ void display()
 }
 
 
-// both of the two pass use the "render() function"
-// the first pass render the backface of the boundbox
-// the second pass render the frontface of the boundbox
-// together with the frontface, use the backface as a 2D texture in the second pass
-// to calculate the entry point and the exit point of the ray in and out the box.
-static
-void render(GLenum cullFace)
-{
-    GL_ERROR();
-    glClearColor(0.2f,0.2f,0.2f,1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //  transform the box
-    glm::mat4 projection = glm::perspective(60.0f, (GLfloat)g_winWidth/g_winHeight, 0.1f, 400.f);
-    glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f),
-                                 glm::vec3(0.0f, 0.0f, 0.0f),
-                                 glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 model = mat4(1.0f);
-    model *= glm::rotate((float)g_angle, glm::vec3(0.0f, 1.0f, 0.0f));
-    // to make the "head256.raw" i.e. the volume data stand up.
-    model *= glm::rotate(90.0f, vec3(1.0f, 0.0f, 0.0f));
-    model *= glm::translate(glm::vec3(-0.5f, -0.5f, -0.5f));
-    // notice the multiplication order: reverse order of transform
-    glm::mat4 mvp = projection * view * model;
-    GLuint mvpIdx = glGetUniformLocation(g_programHandle, "MVP");
-    if (mvpIdx >= 0)
-    {
-        glUniformMatrix4fv(mvpIdx, 1, GL_FALSE, &mvp[0][0]);
-    }
-    else
-    {
-        cerr << "can't get the MVP" << endl;
-    }
-    GL_ERROR();
-    drawBox(cullFace);
-    GL_ERROR();
-    // glutWireTeapot(0.5);
-}
-
-
 static
 void rotateDisplay()
 {
@@ -690,6 +665,22 @@ void keyboard(unsigned char key, int x, int y)
         exit(EXIT_SUCCESS);
         break;
     }
+}
+
+
+static
+void init()
+{
+    g_texWidth = g_winWidth;
+    g_texHeight = g_winHeight;
+    initVBO();
+    initShader();
+    g_tffTexObj = initTFF1DTex("tff.dat");
+    g_bfTexObj = initFace2DTex(g_texWidth, g_texHeight);
+    g_volTexObj = initVol3DTex("head256.raw", 256, 256, 225);
+    GL_ERROR();
+    initFrameBuffer(g_bfTexObj, g_texWidth, g_texHeight);
+    GL_ERROR();
 }
 
 
