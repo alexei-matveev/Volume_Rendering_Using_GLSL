@@ -515,7 +515,7 @@ void render(GLenum cullFace)
     glClearColor(0.2f,0.2f,0.2f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //  transform the box
-    glm::mat4 projection = glm::perspective(60.0f, (GLfloat)g_winWidth/g_winHeight, 0.1f, 400.f);
+    glm::mat4 projection = glm::perspective ((GLfloat) M_PI / 3, (GLfloat) g_winWidth / g_winHeight, 0.1f, 400.f);
     glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f),
                                  glm::vec3(0.0f, 0.0f, 0.0f),
                                  glm::vec3(0.0f, 1.0f, 0.0f));
