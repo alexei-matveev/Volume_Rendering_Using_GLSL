@@ -2,13 +2,10 @@
 // FIXME:  The  #version  directive  must  occur in  a  shader  before
 // anything else, except for comments and white space.
 //
-#if __VERSION__ >= 400
-#version 400
-#define LAYOUT_LOCATION(n) layout(location = n)
-#else
+// #version 400
+// #define LAYOUT_LOCATION(n) layout(location = n)
 #version 130
 #define LAYOUT_LOCATION(n) /* layout(location = n) */
-#endif
 
 LAYOUT_LOCATION(0) in vec3 VerPos;
 /* Have to use this variable! Or it will be very hard to debug for AMD

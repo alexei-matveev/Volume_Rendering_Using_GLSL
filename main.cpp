@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glext.h>
+#define GLM_FORCE_RADIANS       // to silence #warnings
 #include <GL/glut.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -25,7 +26,7 @@ static GLuint g_vao;
 static GLuint g_programHandle;
 static GLuint g_winWidth = 400;
 static GLuint g_winHeight = 400;
-static GLint g_angle = 0;
+static GLfloat g_angle = 0.0;
 static GLuint g_frameBuffer;
 // transfer function
 static GLuint g_tffTexObj;
@@ -519,9 +520,9 @@ void render(GLenum cullFace)
                                  glm::vec3(0.0f, 0.0f, 0.0f),
                                  glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 model = mat4(1.0f);
-    model *= glm::rotate((float)g_angle, glm::vec3(0.0f, 1.0f, 0.0f));
+    model *= glm::rotate (g_angle, glm::vec3 (0.0f, 1.0f, 0.0f));
     // to make the "head256.raw" i.e. the volume data stand up.
-    model *= glm::rotate(90.0f, vec3(1.0f, 0.0f, 0.0f));
+    model *= glm::rotate ((float) M_PI / 2, vec3 (1.0f, 0.0f, 0.0f));
     model *= glm::translate(glm::vec3(-0.5f, -0.5f, -0.5f));
     // notice the multiplication order: reverse order of transform
     glm::mat4 mvp = projection * view * model;
@@ -612,7 +613,9 @@ void display()
 static
 void rotateDisplay()
 {
-    g_angle = (g_angle + 1) % 360;
+    g_angle = (g_angle + M_PI / 180);
+    if (g_angle > 2 * M_PI)
+        g_angle -= 2 * M_PI;
     glutPostRedisplay();
 }
 
